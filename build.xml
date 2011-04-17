@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MessageBackup" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<description>Social network messaging backup</description>
+
+	<property file="build.properties" />
+
+	<property name="src.dir" value="src" />
+	<property name="tests.dir" value="tests" />
+	<property name="build.dir" value="build/classes" />
+	<property name="dist.dir" value="dist" />
+	<property name="lib.dir" value="lib" />
+
+	<property name="messagebackup.jar" value="${dist.dir}/messagebackup-${messagebackup.version}.jar" />
+	<property name="messagebackup.main-class" value="com.github.greyteardrop.messagebackup.Launcher" />
+
+	<property name="compile.debug" value="true" />
+	<property name="compile.debuglevel" value="lines,vars,source" />
+
+	<property name="ivy.version" value="2.2.0" />
+	<property name="ivy.jar" value="${lib.dir}/ivy-${ivy.version}.jar" />
+	<property name="ivy.antlib" value="org/apache/ivy/ant/antlib.xml" />
+
+	<fileset id="dependencies.default.fileset" dir="${lib.dir}/default" includes="**/*.jar" />
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${lib.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="clean" description="Delete temporary folders">
+		<delete dir="${build.dir}" failonerror="false" deleteonexit="true" />
+		<delete dir="${dist.dir}" failonerror="false" deleteonexit="true" />
+	</target>
+
+	<target name="check-ivy">
+		<available resource="${ivy.antlib}" property="ivy.installed" />
+	</target>
+
+	<target name="install-ivy" depends="init,check-ivy" unless="ivy.installed">
+		<echo message="downloading ivy... ${ivy.jar}" />
+		<get
+				src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
+				dest="${ivy.jar}"
+				usetimestamp="true" />
+	</target>
+
+	<target name="include-ivy" depends="install-ivy" unless="ivy.installed">
+		<taskdef resource="${ivy.antlib}" uri="antlib:org.apache.ivy.ant">
+			<classpath path="${ivy.jar}" />
+		</taskdef>
+	</target>
+
+	<target name="resolve-dependencies" depends="include-ivy">
+		<ivy:retrieve
+				type="jar"
+				sync="true"
+				pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" />
+	</target>
+
+	<target name="compile" depends="init" description="Compile source code">
+		<javac
+				srcdir="${src.dir}"
+				destdir="${build.dir}"
+				source="1.6"
+				target="1.6"
+				debug="${compile.debug}"
+				debuglevel="${compile.debuglevel}">
+			<classpath>
+				<fileset refid="dependencies.default.fileset" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Build standalone jar">
+		<jar destfile="${messagebackup.jar}" basedir="${build.dir}">
+			<zipgroupfileset refid="dependencies.default.fileset" />
+			<manifest>
+				<attribute name="Main-Class" value="${messagebackup.main-class}" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>
