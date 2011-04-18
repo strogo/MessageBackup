@@ -58,7 +58,7 @@
 				pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" />
 	</target>
 
-	<target name="compile" depends="init" description="Compile source code">
+	<target name="compile" depends="init,resolve-dependencies" description="Compile source code">
 		<javac
 				srcdir="${src.dir}"
 				destdir="${build.dir}"
