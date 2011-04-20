@@ -49,6 +49,7 @@
 		<taskdef resource="${ivy.antlib}" uri="antlib:org.apache.ivy.ant">
 			<classpath path="${ivy.jar}" />
 		</taskdef>
+		<ivy:settings file="ivysettings.xml" />
 	</target>
 
 	<target name="resolve-dependencies" depends="include-ivy">
