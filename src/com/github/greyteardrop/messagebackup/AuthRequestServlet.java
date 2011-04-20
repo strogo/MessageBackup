@@ -7,10 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AuthRequestServlet extends HttpServlet {
+	private static final String AUTH_URL = "http://api.vkontakte.ru/oauth/authorize?client_id=%s&scope=%s&redirect_uri=%s&response_type=token";
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String authUrl = String.format(
-			"http://api.vkontakte.ru/oauth/authorize?client_id=%s&scope=%s&redirect_uri=%s&response_type=token",
+			AUTH_URL,
 			2220649,
 			"messages",
 			"http://127.0.0.1:8080/return"
