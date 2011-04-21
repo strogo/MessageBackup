@@ -59,7 +59,13 @@
 				pattern="${lib.dir}/[conf]/[artifact]-[revision].[ext]" />
 	</target>
 
-	<target name="compile" depends="init,resolve-dependencies" description="Compile source code">
+	<target name="prepare-resources" depends="init">
+		<copy todir="${build.dir}" overwrite="true">
+			<fileset dir="${src.dir}" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<target name="compile" depends="init,resolve-dependencies,prepare-resources" description="Compile source code">
 		<javac
 				srcdir="${src.dir}"
 				destdir="${build.dir}"
