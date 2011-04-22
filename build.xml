@@ -80,8 +80,19 @@
 	</target>
 
 	<target name="jar" depends="compile" description="Build standalone jar">
-		<jar destfile="${messagebackup.jar}" basedir="${build.dir}">
+		<jar jarfile="build/external-default.jar">
 			<zipgroupfileset refid="dependencies.default.fileset" />
+		</jar>
+		<jar destfile="${messagebackup.jar}" basedir="${build.dir}">
+			<zipfileset src="build/external-default.jar">
+				<exclude name="about.html" />
+				<exclude name="NOTICE" />
+				<exclude name="LICENSE" />
+				<exclude name="jetty-dir.css" />
+				<exclude name="META-INF/maven/**" />
+				<exclude name="META-INF/LICENSE.txt" />
+				<exclude name="META-INF/NOTICE.txt" />
+			</zipfileset>
 			<manifest>
 				<attribute name="Main-Class" value="${messagebackup.main-class}" />
 			</manifest>
