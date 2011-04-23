@@ -47,6 +47,9 @@ public class Launcher {
 			ServletContextHandler context = new ServletContextHandler();
 			context.addServlet(AuthRequestServlet.class, "/");
 			context.addServlet(TokenSaverServlet.class, "/return");
+			context.setAttribute("launchConfig", launchConfig);
+			context.setAttribute("entityManager", entityManager);
+			context.setAttribute("config", config);
 			server.setHandler(context);
 
 			server.start();
@@ -60,12 +63,12 @@ public class Launcher {
 	}
 
 	private Config loadConfig() {
-		entityManager.getTransaction().begin();
 		List<Config> configs = entityManager.createQuery("SELECT c FROM Config c", Config.class).getResultList();
-		entityManager.getTransaction().commit();
 		if (configs.isEmpty()) {
 			Config config = new Config();
+			entityManager.getTransaction().begin();
 			entityManager.persist(config);
+			entityManager.getTransaction().commit();
 			return config;
 		} else {
 			return configs.get(0);

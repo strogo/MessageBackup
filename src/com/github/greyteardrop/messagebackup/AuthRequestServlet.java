@@ -8,6 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AuthRequestServlet extends HttpServlet {
 	private static final String AUTH_URL = "http://api.vkontakte.ru/oauth/authorize?client_id=%s&scope=%s&redirect_uri=%s&response_type=token";
+	private LaunchConfig launchConfig;
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		launchConfig = (LaunchConfig) getServletContext().getAttribute("launchConfig");
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -15,7 +22,7 @@ public class AuthRequestServlet extends HttpServlet {
 			AUTH_URL,
 			2220649,
 			"messages",
-			"http://127.0.0.1:8080/return"
+			String.format("http://127.0.0.1:%d/return", launchConfig.getPort())
 		);
 
 		resp.sendRedirect(authUrl);
