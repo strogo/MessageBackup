@@ -9,11 +9,18 @@ public class LaunchConfig {
 	@Parameter(names = { "-f", "--file" }, description = "Database file for message storage")
 	private String dbName = "messagebackup";
 
+	@Parameter(names = "--app-id", description = "vkontakte application id")
+	private String appId = "2220649";
+
 	public int getPort() {
 		return port;
 	}
 
 	public String getDbName() {
 		return dbName;
+	}
+
+	public String getAppId() {
+		return appId;
 	}
 }

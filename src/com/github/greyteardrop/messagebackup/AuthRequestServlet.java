@@ -20,7 +20,7 @@ public class AuthRequestServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String authUrl = String.format(
 			AUTH_URL,
-			2220649,
+			launchConfig.getAppId(),
 			"messages",
 			String.format("http://127.0.0.1:%d/return", launchConfig.getPort())
 		);
