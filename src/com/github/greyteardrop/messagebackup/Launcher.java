@@ -6,6 +6,7 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,11 @@ public class Launcher {
 	private void run() {
 		try {
 			Config config = loadConfig();
+			Date tokenExpirationTime = config.getTokenExpirationTime();
+			Date now = new Date();
+			if (tokenExpirationTime != null && tokenExpirationTime.after(now)) {
+				return;
+			}
 
 			Server server = new Server(launchConfig.getPort());
 
